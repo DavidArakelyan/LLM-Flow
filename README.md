@@ -42,6 +42,24 @@ cp .env.example .env
 docker compose up --build
 ```
 
+Point your browser to <http://localhost:8000/docs> for backend OpenAPI docs.
+
+## Repository layout
+```text
+llm-flow/
+├─ docker-compose.yml
+├─ services/
+│  ├─ backend/ …               # FastAPI + LangGraph orchestrator
+│  ├─ web_search_tool/ …       # FastMCP micro‑service
+│  └─ docs_retriever_tool/ …   # FastMCP micro‑service
+├─ docs/
+│  └─ architecture.mmd         # mermaid diagram
+└─ .vscode/
+   └─ launch.json
+```
+
+Full design rationale and extension guidance lives in **docs/architecture.mmd**.
+
 The services will be available at:
 - Backend: http://localhost:8000
 - Docs Retriever: http://localhost:7002
@@ -55,3 +73,4 @@ Each service is a separate Python application with its own requirements.txt and 
 ## License
 
 MIT
+
