@@ -1,0 +1,31 @@
+        %%{init: {'theme':'neutral'}}%%
+        graph TD
+            subgraph Client Side
+                A[React / TS
+frontend]
+            end
+            subgraph Backend
+                AA[FastAPI Router<br/>LangGraph]
+                B[Query<br/>Classifier]
+                C[Simple<br/>Responder]
+                D[Web Search<br/>Tool]
+                E[Docs RAG<br/>Tool]
+                F[Code<br/>Generator]
+                G[Text<br/>Generator]
+            end
+            subgraph Infra
+                V[Qdrant<br/>Vector DB]
+            end
+            A --HTTP--> AA
+            AA --> B
+            B --simple--> C
+            B --needs_web_search--> D
+            B --needs_doc--> E
+            E --wants_code--> F
+            E --wants_text--> G
+            F -.write context.-> V
+            E -.read context.-> V
+            D -.context.-> AA
+            C --> AA
+            F --> AA
+            G --> AA
