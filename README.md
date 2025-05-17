@@ -7,6 +7,7 @@ A microservices-based application for handling LLM operations with document retr
 - Backend: Main service orchestrating the flow of operations
 - Docs Retriever Tool: Service for semantic document retrieval
 - Web Search Tool: Service for web search operations
+- CLI Chat Client: Command-line interface for interacting with the LLM Flow system
 
 ## Prerequisites
 
@@ -42,6 +43,12 @@ cp .env.example .env
 docker compose up --build
 ```
 
+4. Run the CLI chat client (in a separate terminal):
+```bash
+cd services/cli_chat_client
+./run_cli_chat_client.sh
+```
+
 Point your browser to <http://localhost:8000/docs> for backend OpenAPI docs.
 
 ## Repository layout
@@ -51,7 +58,8 @@ llm-flow/
 ├─ services/
 │  ├─ backend/ …               # FastAPI + LangGraph orchestrator
 │  ├─ web_search_tool/ …       # FastMCP micro‑service
-│  └─ docs_retriever_tool/ …   # FastMCP micro‑service
+│  ├─ docs_retriever_tool/ …   # FastMCP micro‑service
+│  └─ cli_chat_client/ …       # Command-line chat interface
 ├─ docs/
 │  └─ architecture.mmd         # mermaid diagram
 └─ .vscode/
@@ -65,10 +73,18 @@ The services will be available at:
 - Docs Retriever: http://localhost:7002
 - Web Search: http://localhost:7003
 - Vector DB: http://localhost:6333
+- Frontend: http://localhost:3000
 
 ## Development
 
-Each service is a separate Python application with its own requirements.txt and Dockerfile.
+Each service is a separate Python application with its own requirements.txt and Dockerfile, except for the frontend which is a React/TypeScript application using Vite.
+
+To run the frontend in development mode:
+```bash
+cd services/frontend
+npm install
+npm run dev
+```
 
 ## License
 

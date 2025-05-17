@@ -1,27 +1,30 @@
-version: "3.9"
 services:
   backend:
     build: ./services/backend
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - VECTOR_DB_URL=http://vector_db:6333
-    ports: ["8000:8000"]
-    depends_on: [vector_db]
+    ports: [ "8000:8000" ]
+    depends_on: [ vector_db ]
   web_search_tool:
     build: ./services/web_search_tool
     environment:
       - SERPER_API_KEY=${SERPER_API_KEY}
-    ports: ["7001:7001"]
+    ports: [ "7001:7001" ]
   docs_retriever_tool:
     build: ./services/docs_retriever_tool
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - VECTOR_DB_URL=http://vector_db:6333
-    ports: ["7002:7002"]
+    ports: [ "7002:7002" ]
   vector_db:
     image: qdrant/qdrant
     volumes:
       - qdrant_storage:/qdrant/storage
-    ports: ["6333:6333"]
+    ports: [ "6333:6333" ]
+  frontend:
+    build: ./services/frontend
+    ports: [ "3000:80" ]
+    depends_on: [ backend ]
 volumes:
   qdrant_storage:

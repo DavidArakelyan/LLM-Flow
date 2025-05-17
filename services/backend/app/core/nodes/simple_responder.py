@@ -1,7 +1,11 @@
 from openai import AsyncOpenAI
 from typing import Any
+import os
+from dotenv import load_dotenv
 
-client = AsyncOpenAI()
+load_dotenv()
+
+client = AsyncOpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 
 async def respond(inputs: dict[str, Any]) -> dict[str, Any]:

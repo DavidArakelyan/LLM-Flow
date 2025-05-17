@@ -6,3 +6,5 @@ qdrant-client
 fastmcp
 openai
 pydantic
+httpx
+python-dotenv
