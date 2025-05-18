@@ -95,6 +95,72 @@ Two convenience scripts are provided for running the services:
 - `run_all_services_docker.sh`: Launches all services including the backend in Docker containers
 - `run_mcp_services_docker.sh`: Launches only the MCP (Micro-service Communication Protocol) services, useful for backend development
 
+#### Default Behaviors
+
+- Without any options, both scripts will:
+  - Use existing Docker images (no rebuild)
+  - Run in attached mode (showing logs)
+  - Preserve existing containers and volumes
+  - Use default timeouts (30s for health checks)
+
+#### run_all_services_docker.sh
+
+This script provides a complete deployment of all services in Docker containers:
+
+```bash
+./run_all_services_docker.sh [-b] [-d] [-h]
+```
+
+Options:
+- `-b`: Build images before starting containers
+- `-d`: Run in detached mode
+- `-h`: Show help message
+
+Default behavior:
+```bash
+# Equivalent to:
+docker compose up
+```
+
+#### run_mcp_services_docker.sh
+
+This script launches only the supporting microservices, ideal for backend development:
+
+```bash
+./run_mcp_services_docker.sh [-b] [-d] [-h] [-c cleanup]
+```
+
+Options:
+- `-b`: Build images before starting containers
+- `-d`: Run in detached mode
+- `-c`: Clean up existing containers and volumes
+- `-h`: Show help message
+
+Default behavior:
+```bash
+# Equivalent to:
+docker compose up web_search_tool docs_retriever_tool qdrant
+```
+
+#### Service Health Checks
+
+The `check_backend_status.sh` script verifies service health:
+```bash
+./check_backend_status.sh [-t timeout] [-v]
+```
+
+Options:
+- `-t`: Set custom timeout in seconds (default: 30)
+- `-v`: Verbose output
+
+Default behavior:
+- Checks all required services
+- Uses 30-second timeout
+- Shows only errors and success messages
+- Returns exit code 0 if all checks pass, 1 if any fail
+
+### Debugging the Backend Flow
+
 For backend development, use the second script:
 
 ```bash
