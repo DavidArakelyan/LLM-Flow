@@ -1,8 +1,9 @@
 import logging
+from enum import Enum
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-import asyncio
 from .core.graph import build_graph
+from .core.graph_simple import build_simple_graph
 
 # Configure logging
 logging.basicConfig(
@@ -13,13 +14,50 @@ logger = logging.getLogger(__name__)
 app = FastAPI(title="Augmented‑LLM Router")
 
 
+class WorkflowType(str, Enum):
+    """Available workflow types for the LLM router."""
+
+    SIMPLE = "simple"
+    FULL = "full"
+    # Add new workflow types here as they are implemented
+    # SEMANTIC = "semantic"
+    # RAG = "rag"
+    # etc...
+
+
+# For easy workflow switching during development
+# ACTIVE_WORKFLOW = WorkflowType.FULL
+ACTIVE_WORKFLOW = WorkflowType.SIMPLE
+
+
+# Define the message model
 class Message(BaseModel):
     id: str
     content: str
     history: list[str] = []
 
 
-workflow = build_graph()
+# Initialize workflow
+def get_workflow(workflow_type: WorkflowType):
+    """Get the appropriate workflow based on type."""
+    match workflow_type:
+        case WorkflowType.FULL:
+            return build_graph()
+        case WorkflowType.SIMPLE:
+            return build_simple_graph()
+        # Add new workflow types here as they are implemented
+        # case WorkflowType.SEMANTIC:
+        #     return build_semantic_graph()
+        # case WorkflowType.RAG:
+        #     return build_rag_graph()
+        case _:
+            logger.warning(
+                f"Unknown workflow type {workflow_type}, falling back to FULL"
+            )
+            return build_graph()
+
+
+workflow = get_workflow(ACTIVE_WORKFLOW)
 
 
 @app.post("/chat")
