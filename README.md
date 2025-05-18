@@ -86,6 +86,60 @@ npm install
 npm run dev
 ```
 
+## Running Services & Debugging
+
+### Service Launch Scripts
+
+Two convenience scripts are provided for running the services:
+
+- `run_all_services_docker.sh`: Launches all services including the backend in Docker containers
+- `run_mcp_services_docker.sh`: Launches only the MCP (Micro-service Communication Protocol) services, useful for backend development
+
+For backend development, use the second script:
+
+```bash
+./run_mcp_services_docker.sh
+```
+
+This will start:
+- Web Search service
+- Docs Retriever service
+- Vector DB
+
+### CLI Chat Client
+
+The CLI Chat Client (`services/cli_chat_client`) provides a terminal-based interface for testing and interacting with the LLM Flow system. To use it:
+
+1. Set up the backend development environment:
+```bash
+cd services/cli_chat_client
+source setup_env.sh  # Activated bachend's virtual environment providing correct context for debugging.
+```
+
+2. Start the backend in debug mode using VS Code:
+   - Open the desired backend file(s) and set your breakpoint(s)
+   - Open VS Code command palette (Cmd+Shift+P)
+   - Select "Debug: Start Debugging" or press F5
+   - Choose the "Python: FastAPI" configuration
+
+3. Verify backend status:
+```bash
+./check_backend_status.sh
+```
+
+4. Launch the CLI client:
+```bash
+./run_cli_chat_client.sh
+```
+
+The CLI client provides a REPL-like interface for sending messages to the LLM Flow system. Type your messages and press Enter to send. Use Ctrl+C to exit.
+
+### Debugging Tips
+
+- The `setup_env.sh` script creates a Python virtual environment specific to the backend service and installs all required dependencies. This ensures proper dependency isolation for debugging.
+- When running the backend through VS Code's debugger, you can set breakpoints in the code and inspect variables during execution.
+- The `check_backend_status.sh` script verifies that the backend API is responsive before attempting to connect with the CLI client.
+
 ## License
 
 MIT
