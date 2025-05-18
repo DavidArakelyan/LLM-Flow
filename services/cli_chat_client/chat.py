@@ -36,9 +36,13 @@ async def chat_loop():
                 result = response.json()
 
                 # Print response
-                if "answer" in result:
-                    print("\nAssistant:", result["answer"])
-                elif "response" in result:
+                # if "answer" in result:
+                #    print("\nAssistant:", result["answer"])
+                # elif "response" in result:
+                #    print("\nAssistant:", result["response"])
+                # else:
+                #    print("\nAssistant:", "No response received")
+                if isinstance(result, dict) and "response" in result:
                     print("\nAssistant:", result["response"])
                 else:
                     print("\nAssistant:", "No response received")
