@@ -1,11 +1,11 @@
-from openai import AsyncOpenAI
 from pathlib import Path
 import re
 import uuid
-from .node_logging import log_node_calls, get_node_logger
+from app.core.config import get_model_config, get_system_prompt, openai_client
+from app.core.nodes.node_logging import log_node_calls, get_node_logger
 
 logger = get_node_logger(__name__)
-client = AsyncOpenAI()
+client = openai_client
 
 
 @log_node_calls
@@ -18,8 +18,16 @@ async def gen_code(state):
             lang = "cpp" if "c" in key else ("typescript" if "ts" in key else "java")
     ext = {"python": ".py", "cpp": ".cpp", "typescript": ".ts", "java": ".java"}[lang]
     prompt = f"Write a complete {lang} code file that {state['query']}"
+    # Get code-specific model configuration
+    model_config = get_model_config("code")
     resp = await client.chat.completions.create(
-        model="claude-3-opus-20240229", messages=[{"role": "user", "content": prompt}]
+        model=model_config["model"],
+        messages=[
+            {"role": "system", "content": get_system_prompt("code")},
+            {"role": "user", "content": prompt},
+        ],
+        temperature=model_config["temperature"],
+        max_tokens=model_config["max_tokens"],
     )
     code = resp.choices[0].message.content
     fpath = Path(f"/mnt/data/{uuid.uuid4()}{ext}")
