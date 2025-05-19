@@ -71,7 +71,8 @@ async def chat(msg: Message):
         logger.info("Invoking workflow")
         result = await workflow.ainvoke(state)
         logger.info("Workflow completed successfully")
-        logger.debug(f"Workflow result: {result}")
+        logger.debug(f"Workflow result keys: {result.keys()}")
+        logger.debug(f"Workflow result full: {result}")
 
         # Return the answer or response from the workflow
         if "answer" in result:
